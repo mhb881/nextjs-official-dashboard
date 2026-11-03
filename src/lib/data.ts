@@ -1,13 +1,17 @@
+import "server-only";
+
 import postgres from "postgres";
 import {
   CustomerField,
   CustomersTableType,
+  Invoice,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
 } from "./types";
 import { formatCurrency } from "./utils";
+import { z } from "zod";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -214,5 +218,48 @@ export async function fetchFilteredCustomers(query: string) {
   } catch (err) {
     console.error("Database Error:", err);
     throw new Error("Failed to fetch customer table.");
+  }
+}
+
+const CreateInvoiceSchema = z.object({
+  customerId: z.string().optional(),
+  customer_id: z.string().optional(),
+  amount: z.number(),
+  status: z.enum(["pending", "paid"]).optional().default("pending"),
+  date: z.string().optional(),
+});
+
+export type CreateInvoiceDTO = z.infer<typeof CreateInvoiceSchema>;
+
+export async function createInvoiceInDB(data: CreateInvoiceDTO) {
+  const dto = CreateInvoiceSchema.parse(data);
+
+  const customerId = dto.customerId ?? dto.customer_id;
+  if (!customerId) {
+    throw new Error("Missing customerId");
+  }
+
+  const amountInCents = Math.round(dto.amount);
+  const status = dto.status;
+  const date = dto.date ?? new Date().toISOString().split("T")[0];
+
+  try {
+    const [newInvoice] = await sql<Invoice[]>`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      RETURNING id, customer_id, amount, status, date
+    `;
+
+    // 这里要再映射成 ResponseDTO，不要直接 return newInvoice
+    return {
+      id: newInvoice.id,
+      customerId: newInvoice.customer_id,
+      amount: newInvoice.amount,
+      status: newInvoice.status,
+      date: newInvoice.date,
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to create invoice in database.");
   }
 }
