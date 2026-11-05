@@ -1,4 +1,4 @@
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import AcmeLogo from "~/ui/acme-logo";
@@ -6,7 +6,7 @@ import { lusitana } from "~/ui/fonts";
 
 export default function HomePage() {
   return (
-    <main className="mx-auto flex min-h-screen flex-col p-4 sm:p-6 lg:p-8">
+    <div className="mx-auto flex min-h-screen flex-col p-4 sm:p-6 lg:p-8">
       {/* Top Banner with responsive height & Acme Logo */}
       <div className="flex h-20 shrink-0 items-end rounded-xl bg-blue-500 p-4 transition-all duration-200 sm:h-28 md:h-40 md:p-6 lg:h-48">
         <AcmeLogo />
@@ -63,6 +63,6 @@ export default function HomePage() {
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

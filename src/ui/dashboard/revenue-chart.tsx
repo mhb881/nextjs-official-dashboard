@@ -1,7 +1,7 @@
 import { generateYAxis } from "~/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { lusitana } from "~/ui/fonts";
-import { Revenue } from "~/lib/types";
+import { fetchRevenue } from "~/lib/data";
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -9,13 +9,11 @@ import { Revenue } from "~/lib/types";
 // https://www.chartjs.org/
 // https://airbnb.io/visx/
 
-export default async function RevenueChart({
-  revenue,
-}: {
-  revenue: Revenue[];
-}) {
-  const chartHeight = 350;
+// 改为异步组件，移除 props
+export default async function RevenueChart({}) {
   // NOTE: Uncomment this code in Chapter 7
+  const revenue = await fetchRevenue(); // 在组件内部直接拉取数据
+  const chartHeight = 350;
 
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
 
