@@ -31,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "nextjs-dashboard-example"]
+  "exclude": ["node_modules", "nextjs-dashboard-example", "docs"]
 }
