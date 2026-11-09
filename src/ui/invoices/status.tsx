@@ -1,27 +1,27 @@
-import { CheckIcon, ClockIcon } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 import clsx from "clsx";
 
 export default function InvoiceStatus({ status }: { status: string }) {
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-2 py-1 text-xs",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
         {
-          "bg-gray-100 text-gray-500": status === "pending",
-          "bg-green-500 text-white": status === "paid",
+          "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20": status === "pending",
+          "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20": status === "paid",
         },
       )}
     >
       {status === "pending" ? (
         <>
           Pending
-          <ClockIcon className="ml-1 w-4 text-gray-500" />
+          <Clock className="h-3.5 w-3.5 text-amber-600" />
         </>
       ) : null}
       {status === "paid" ? (
         <>
           Paid
-          <CheckIcon className="ml-1 w-4 text-white" />
+          <Check className="h-3.5 w-3.5 text-emerald-600" />
         </>
       ) : null}
     </span>
