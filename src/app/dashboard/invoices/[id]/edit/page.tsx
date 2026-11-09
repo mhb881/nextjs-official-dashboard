@@ -1,6 +1,7 @@
 import Form from "~/ui/invoices/edit-form";
 import Breadcrumbs from "~/ui/invoices/breadcrumbs";
 import { fetchCustomers, fetchInvoiceById } from "~/lib/data";
+import { notFound } from "next/navigation";
 
 /*
 更新发票需要以下步骤：
@@ -19,6 +20,10 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     fetchInvoiceById(id),
     fetchCustomers(),
   ]);
+
+  if (!invoice) {
+    notFound();
+  }
 
   return (
     <main>

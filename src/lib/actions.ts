@@ -33,11 +33,16 @@ export async function createInvoice(data: FormData) {
   // 5. 生成当前日期
   const date = new Date().toISOString().split("T")[0];
 
-  // 6. 插入发票数据
-  await sql`
+  try {
+    // 6. 插入发票数据
+    await sql`
     INSERT INTO invoices (customer_id, amount, status, date)
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
   `;
+  } catch (error) {
+    console.error(error);
+    return { message: "Database error: Failed to create invoice." };
+  }
 
   // 7. 重新验证发票列表，确保显示最新的发票
   revalidatePath("/dashboard/invoices");
@@ -54,17 +59,23 @@ export async function updateInvoice(id: string, formData: FormData) {
 
   const amountInCents = amount * 100;
 
-  await sql`
+  try {
+    await sql`
     UPDATE invoices
     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
     WHERE id = ${id}
   `;
+  } catch (error) {
+    console.error(error);
+    return { message: "Database error: Failed to update invoice." };
+  }
 
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
 
 export async function deleteInvoice(id: string) {
+  throw new Error("Failed to Delete Invoice");
   await sql`DELETE FROM  invoices WHERE id = ${id}`;
   revalidatePath("/dashboard/invoices");
 }

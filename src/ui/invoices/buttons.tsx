@@ -6,7 +6,7 @@ export function CreateInvoice() {
   return (
     <Link
       href="/dashboard/invoices/create"
-      className="group flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      className="group flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-4 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 active:scale-95"
     >
       <span className="hidden md:block">Create Invoice</span>
       <Plus className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
@@ -40,4 +40,3 @@ export function DeleteInvoice({ id }: { id: string }) {
     </form>
   );
 }
-

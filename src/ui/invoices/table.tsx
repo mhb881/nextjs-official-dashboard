@@ -33,7 +33,9 @@ export default async function InvoicesTable({
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       />
-                      <p className="font-medium text-gray-900">{invoice.name}</p>
+                      <p className="font-medium text-gray-900">
+                        {invoice.name}
+                      </p>
                     </div>
                     <p className="text-xs text-gray-500">{invoice.email}</p>
                   </div>
@@ -44,7 +46,9 @@ export default async function InvoicesTable({
                     <p className="text-lg font-semibold text-gray-900">
                       {formatCurrency(invoice.amount)}
                     </p>
-                    <p className="text-xs text-gray-500">{formatDateToLocal(invoice.date)}</p>
+                    <p className="text-xs text-gray-500">
+                      {formatDateToLocal(invoice.date)}
+                    </p>
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdateInvoice id={invoice.id} />
@@ -55,7 +59,7 @@ export default async function InvoicesTable({
             ))}
           </div>
           <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+            <thead className="rounded-lg text-left text-xs font-semibold tracking-wider text-gray-500 uppercase">
               <tr>
                 <th scope="col" className="px-4 py-4 sm:pl-6">
                   Customer
@@ -92,13 +96,15 @@ export default async function InvoicesTable({
                         height={28}
                         alt={`${invoice.name}'s profile picture`}
                       />
-                      <p className="font-medium text-gray-900">{invoice.name}</p>
+                      <p className="font-medium text-gray-900">
+                        {invoice.name}
+                      </p>
                     </div>
                   </td>
                   <td className="px-3 py-3.5 whitespace-nowrap text-gray-600">
                     {invoice.email}
                   </td>
-                  <td className="px-3 py-3.5 whitespace-nowrap font-semibold text-gray-900">
+                  <td className="px-3 py-3.5 font-semibold whitespace-nowrap text-gray-900">
                     {formatCurrency(invoice.amount)}
                   </td>
                   <td className="px-3 py-3.5 whitespace-nowrap text-gray-600">
