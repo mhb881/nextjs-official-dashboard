@@ -10,7 +10,7 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 // 1. 定义表单验证模式
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string({
+  customerId: z.string().min(1, {
     error: "请选择一个客户",
   }),
   amount: z.coerce.number().gt(0, {
@@ -88,10 +88,12 @@ export async function updateInvoice(
   });
 
   if (!validatedFields.success) {
+    // 🚀 Zod 4 最新最佳实践：顶层函数式提取 fieldErrors
+    const { fieldErrors } = z.flattenError(validatedFields.error);
+
     return {
       ok: false,
-      // 🚀 Zod 4 最新最佳实践：顶层函数式提取 fieldErrors
-      errors: z.flattenError(validatedFields.error).fieldErrors,
+      errors: fieldErrors,
       message: "缺少字段，更新发票失败。",
     };
   }

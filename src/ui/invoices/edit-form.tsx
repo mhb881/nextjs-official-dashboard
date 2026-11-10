@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { updateInvoice, State } from "~/lib/actions";
 import { useActionState } from "react";
+import { cn } from "~/lib/utils";
 
 export default function EditInvoiceForm({
   invoice,
@@ -22,7 +23,10 @@ export default function EditInvoiceForm({
 }) {
   const initialState: State = { ok: true, message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
+  const [state, formAction, isPending] = useActionState(
+    updateInvoiceWithId,
+    initialState,
+  );
 
   return (
     <form action={formAction}>
@@ -51,7 +55,7 @@ export default function EditInvoiceForm({
             <select
               id="customer"
               name="customerId"
-              className="peer block w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-2.5 pr-8 pl-10 text-sm shadow-xs outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="peer block w-full cursor-pointer rounded-lg border border-gray-200 bg-white py-2.5 pr-8 pl-10 text-sm shadow-xs transition-all duration-200 outline-none placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               defaultValue={invoice.customer_id}
               aria-describedby="customer-error"
             >
@@ -98,7 +102,7 @@ export default function EditInvoiceForm({
               defaultValue={invoice.amount}
               placeholder="Enter USD amount"
               aria-describedby="amount-error"
-              className="peer block w-full rounded-lg border border-gray-200 bg-white py-2.5 pr-4 pl-10 font-mono text-sm shadow-xs outline-none transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="peer block w-full rounded-lg border border-gray-200 bg-white py-2.5 pr-4 pl-10 font-mono text-sm shadow-xs transition-all duration-200 outline-none placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
             <CircleDollarSignIcon className="pointer-events-none absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-400 transition-colors duration-200 peer-focus:text-blue-600" />
           </div>
@@ -195,10 +199,23 @@ export default function EditInvoiceForm({
         </Link>
         <button
           type="submit"
-          className="group flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-blue-500 px-5 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow active:scale-95"
+          className={cn(
+            "group flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-blue-500 px-5 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow active:scale-95",
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+          )}
+          disabled={isPending}
         >
-          <span>Edit Invoice</span>
-          <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          {isPending ? (
+            <>
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <span>Editing...</span>
+            </>
+          ) : (
+            <>
+              <span>Edit Invoice</span>
+              <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </>
+          )}
         </button>
       </div>
     </form>

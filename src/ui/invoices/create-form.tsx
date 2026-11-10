@@ -11,7 +11,7 @@ import {
   AlertCircleIcon,
 } from "lucide-react";
 import { createInvoice, State } from "~/lib/actions";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState: State = {
@@ -19,7 +19,10 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     errors: {},
     message: null,
   };
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const [state, formAction, isPending] = useActionState(
+    createInvoice,
+    initialState,
+  );
 
   return (
     <form action={formAction}>
@@ -180,7 +183,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
       </div>
 
       {/* 底部按钮栏 */}
-      <div className="mt-6 flex justify-end gap-3">
+      <div className={`mt-6 flex justify-end gap-3`}>
         <Link
           href="/dashboard/invoices"
           className="flex h-10 items-center rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-700 shadow-2xs transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 active:scale-95"
@@ -189,10 +192,20 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         </Link>
         <button
           type="submit"
-          className="group flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-blue-500 px-5 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow active:scale-95"
+          className="group flex h-10 items-center gap-2 rounded-lg bg-blue-500 px-5 text-sm font-medium text-white shadow-xs transition-all duration-200 hover:bg-blue-600 hover:shadow active:scale-95 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={isPending}
         >
-          <span>Create Invoice</span>
-          <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          {isPending ? (
+            <>
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              <span>Creating...</span>
+            </>
+          ) : (
+            <>
+              <span>Create invoice</span>
+              <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </>
+          )}
         </button>
       </div>
     </form>
