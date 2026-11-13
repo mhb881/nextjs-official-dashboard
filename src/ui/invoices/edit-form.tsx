@@ -10,7 +10,7 @@ import {
   AlertCircleIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { updateInvoice, State } from "~/lib/actions";
+import { updateInvoice, InvoiceState } from "~/lib/actions";
 import { useActionState } from "react";
 import { cn } from "~/lib/utils";
 
@@ -21,7 +21,7 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
-  const initialState: State = { ok: true, message: null, errors: {} };
+  const initialState: InvoiceState = { ok: true, message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
   const [state, formAction, isPending] = useActionState(
     updateInvoiceWithId,

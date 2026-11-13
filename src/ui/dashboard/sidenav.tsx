@@ -2,6 +2,7 @@ import Link from "next/link";
 import NavLinks from "./nav-links";
 import AcmeLogo from "~/ui/acme-logo";
 import { Power } from "lucide-react";
+import { logout } from "~/lib/actions";
 
 export default function SideNav() {
   return (
@@ -27,10 +28,10 @@ export default function SideNav() {
         </div>
 
         {/* Sign out button */}
-        <form>
+        <form action={logout}>
           <button
             type="submit"
-            className="group flex h-[48px] w-full grow items-center justify-center gap-3 rounded-lg bg-gray-50 p-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:shadow-xs active:scale-[0.98] md:flex-none md:justify-start md:px-4"
+            className="group flex h-[48px] w-full grow cursor-pointer items-center justify-center gap-3 rounded-lg bg-gray-50 p-3 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-red-50 hover:text-red-600 hover:shadow-xs active:scale-[0.98] md:flex-none md:justify-start md:px-4"
           >
             <Power className="h-5 w-5 shrink-0 text-gray-500 transition-transform duration-200 group-hover:scale-110 group-hover:text-red-600" />
             <span className="hidden md:block">Sign Out</span>

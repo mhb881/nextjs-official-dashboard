@@ -10,11 +10,11 @@ import {
   ArrowRightIcon,
   AlertCircleIcon,
 } from "lucide-react";
-import { createInvoice, State } from "~/lib/actions";
+import { createInvoice, InvoiceState } from "~/lib/actions";
 import { useActionState, useEffect } from "react";
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = {
+  const initialState: InvoiceState = {
     ok: false,
     errors: {},
     message: null,
