@@ -9,6 +9,7 @@ export const auth = betterAuth({
   // 使用环境变量中的 BETTER_AUTH_URL / BETTER_AUTH_SECRET。
   // 生产环境应显式配置正确的站点 URL 和高熵 Secret。
   baseURL: env.BETTER_AUTH_URL,
+  secret: env.BETTER_AUTH_SECRET ?? process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {
     provider: "pg", // or "pg" or "mysql"
     schema: {

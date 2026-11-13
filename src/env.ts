@@ -3,20 +3,22 @@ import * as z from "zod";
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z.url(),
-    BETTER_AUTH_URL: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
+    BETTER_AUTH_URL: z.string().min(1).default("http://localhost:3000"),
+    BETTER_AUTH_SECRET: z.string().min(1).optional(),
   },
-  client: {
-    // NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
-  },
-  // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
+  client: {},
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
-    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
-    // NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
+    BETTER_AUTH_URL:
+      process.env.BETTER_AUTH_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : undefined),
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
   },
-  // For Next.js >= 13.4.4, you only need to destructure client variables:
-  // experimental__runtimeEnv: {
-  //   NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
-  // }
+  emptyStringAsUndefined: true,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
