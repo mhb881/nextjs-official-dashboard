@@ -10,7 +10,9 @@ import { auth } from "~/server/auth";
 import { headers } from "next/headers";
 import { isAPIError } from "better-auth/api";
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+const sql = postgres(process.env.POSTGRES_URL || process.env.DATABASE_URL!, {
+  ssl: "require",
+});
 
 // 定义创建发票的验证模式，id 是数据库自动生成的，不需要用户输入；date 下面的函数生成的
 const CreateInvoice = CreateInvoiceFormSchema.omit({ id: true, date: true });
@@ -199,10 +201,9 @@ export async function updateInvoice(
 
 export async function deleteInvoice(id: string) {
   try {
-    await sql`DELETE FROM  invoices WHERE id = ${id}`;
+    await sql`DELETE FROM invoices WHERE id = ${id}`;
   } catch (error) {
-    console.error(error);
-    return { ok: false, message: "Database error: Failed to delete invoice." };
+    console.error("Database error in deleteInvoice:", error);
   }
   revalidatePath("/dashboard/invoices");
 }
